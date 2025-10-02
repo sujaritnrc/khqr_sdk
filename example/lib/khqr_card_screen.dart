@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:khqr_sdk/khqr_sdk.dart';
+import 'package:khqr_sdk/khqr_widget.dart';
 
 class KhqrCardScreen extends StatefulWidget {
   const KhqrCardScreen({super.key});
