@@ -61,7 +61,7 @@ The standardization of KHQR code specifications will help promote wider use of m
       alt="Code size" />
   </a>
   <a href="https://pub.dev/packages/khqr_sdk">
-    <img src="https://img.shields.io/badge/Platform-Android%20|%20iOS%20-blue.svg?logo=flutter"
+    <img src="https://img.shields.io/badge/Platform-Android%20|%20iOS%20|%20Web%20|%20macOS%20|%20Windows%20|%20Linux%20-blue.svg?logo=flutter"
       alt="Platform" />
   </a>
 </div>

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1
+- Refactor(Widget): Removed dual currency label in `KhqrCardWidget` and export separately from SDK
+- Chore(Example): Updated example project
+- Chore(Docs): Updated README file
+- Chore(Deps) Updated dependencies
+
 ## 2.0.0
 - Feat(SDK): Re-implement all functions in Dart
 - Feat(SDK): Add new function `checkBakongAccount`
