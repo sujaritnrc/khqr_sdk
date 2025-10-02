@@ -103,7 +103,6 @@ class _KhqrCardWidgetState extends State<KhqrCardWidget> {
   double get _headerHeight => _height * 0.12;
   double get _receiverNameFontSize => _height * 0.03;
   double get _amountFontSize => _height * 0.056;
-  double get _dualCurrencyFontSize => _height * 0.035;
   EdgeInsets get _qrMargin => EdgeInsets.symmetric(
     horizontal: _height * 0.065,
     vertical: _height * 0.06,
@@ -287,6 +286,25 @@ class _KhqrCardWidgetState extends State<KhqrCardWidget> {
 
     final qrViewWidget = _buildQrView();
 
+    Widget? symbol;
+    if (widget.showCurrencySymbol) {
+      if (widget.currency == KhqrCurrency.khr) {
+        symbol = SvgPicture.asset(
+          'assets/svg/riel.svg',
+          package: 'khqr_sdk',
+          height: _amountFontSize * 0.75,
+          colorFilter: ColorFilter.mode(qrTextColor, BlendMode.srcIn),
+        );
+      } else if (widget.currency == KhqrCurrency.usd) {
+        symbol = SvgPicture.asset(
+          'assets/svg/dollar.svg',
+          package: 'khqr_sdk',
+          height: _amountFontSize * 0.86,
+          colorFilter: ColorFilter.mode(qrTextColor, BlendMode.srcIn),
+        );
+      }
+    }
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -351,88 +369,46 @@ class _KhqrCardWidgetState extends State<KhqrCardWidget> {
                               ),
                             ),
                             const SizedBox(height: 4.0),
+                            //* Symbol with Amount
                             Padding(
                               padding: EdgeInsets.symmetric(
                                 horizontal: _height * 0.08,
                               ),
-                              child: widget.currency == null
-                                  ? Row(
-                                      children: [
-                                        AutoSizeText(
-                                          'KHR / USD',
-                                          style: TextStyle(
-                                            fontFamily: _fontFamily,
-                                            package: 'khqr_sdk',
-                                            fontSize: _dualCurrencyFontSize,
-                                            height: 1.9,
-                                            color: qrTextColor,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  :
-                                    //* Amount
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        //* Currency symbol
-                                        widget.showCurrencySymbol
-                                            ? widget.currency ==
-                                                      KhqrCurrency.khr
-                                                  ? SvgPicture.asset(
-                                                      'assets/svg/riel.svg',
-                                                      package: 'khqr_sdk',
-                                                      height:
-                                                          _amountFontSize *
-                                                          0.75,
-                                                      colorFilter:
-                                                          ColorFilter.mode(
-                                                            qrTextColor,
-                                                            BlendMode.srcIn,
-                                                          ),
-                                                    )
-                                                  : SvgPicture.asset(
-                                                      'assets/svg/dollar.svg',
-                                                      package: 'khqr_sdk',
-                                                      height:
-                                                          _amountFontSize *
-                                                          0.86,
-                                                      colorFilter:
-                                                          ColorFilter.mode(
-                                                            qrTextColor,
-                                                            BlendMode.srcIn,
-                                                          ),
-                                                    )
-                                            : const SizedBox.shrink(),
-                                        Visibility(
-                                          visible: widget.showCurrencySymbol,
-                                          child: const SizedBox(width: 4.0),
-                                        ),
-                                        //* Amount
-                                        Expanded(
-                                          child: AutoSizeText(
-                                            widget.amount > 0 ||
-                                                    widget.showEmptyAmount
-                                                ? NumberFormatterUtil.formatThousandNumber(
-                                                    widget.amount,
-                                                    alwaysShowDecimal: widget
-                                                        .keepIntegerDecimal,
-                                                  )
-                                                : '',
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              fontFamily: _fontFamily,
-                                              package: 'khqr_sdk',
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: _amountFontSize,
-                                              height: 1.2,
-                                              color: qrTextColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  //* Symbol
+                                  if (symbol != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 4.0,
+                                      ),
+                                      child: symbol,
                                     ),
+                                  //* Amount
+                                  Expanded(
+                                    child: AutoSizeText(
+                                      widget.amount > 0 ||
+                                              widget.showEmptyAmount
+                                          ? NumberFormatterUtil.formatThousandNumber(
+                                              widget.amount,
+                                              alwaysShowDecimal:
+                                                  widget.keepIntegerDecimal,
+                                            )
+                                          : '',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        fontFamily: _fontFamily,
+                                        package: 'khqr_sdk',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: _amountFontSize,
+                                        height: 1.2,
+                                        color: qrTextColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(height: _height * 0.04),
                             CustomPaint(

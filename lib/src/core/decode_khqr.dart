@@ -236,15 +236,15 @@ class DecodeKhqr {
       throw KhqrResponse.error(ErrorCode.khqrInvalid);
     }
 
-    final allField = KhqrTag.tags.map((e) => e.tag).toList();
+    final allTags = KhqrTag.tags.map((e) => e.tag).toList();
 
     List<CutString> tags = [];
     String merchantType = 'individual';
     String lastTag = '';
 
     while (khqrString.isNotEmpty) {
-      CutString sliceTagObject = Helper.cutString(khqrString);
-      String tag = sliceTagObject.tag;
+      final cutString = Helper.cutString(khqrString);
+      String tag = cutString.tag;
       if (tag == lastTag) break;
 
       final isMerchant = tag == '30';
@@ -253,11 +253,11 @@ class DecodeKhqr {
         tag = '29';
       }
 
-      if (allField.contains(tag)) {
-        tags.add(sliceTagObject);
+      if (allTags.contains(tag)) {
+        tags.add(cutString);
       }
 
-      khqrString = sliceTagObject.slicedString;
+      khqrString = cutString.slicedString;
       lastTag = tag;
     }
 
